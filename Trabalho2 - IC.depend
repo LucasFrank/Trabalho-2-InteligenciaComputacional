@@ -47,3 +47,19 @@
 	<iostream>
 	"Graph.h"
 
+1539099887 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2---IC/Graph.cpp
+	"Graph.h"
+
+1539099812 /home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2---IC/Graph.h
+	<stdio.h>
+	<iostream>
+	<string.h>
+	<fstream>
+	<stdlib.h>
+	<vector>
+	<sstream>
+
+1539099723 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2---IC/main.cpp
+	<iostream>
+	"Graph.h"
+

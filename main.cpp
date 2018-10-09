@@ -7,16 +7,18 @@ int main(){
 
     char filePath [100] = "InstancesInput";
     char folder [] = "/TipoA/";              ///  "/"
-    char fileName [] = "DCC136-82_05.txt";   /// InstancesInput/instanciaExemplo.txt       DCC136-82_05.txt
+    char fileName [] = "DCC136-82_05.txt";   /// InstancesInput/instanciaExemplo.txt      A-> DCC136-82_05.txt    D->  200_25_A.txt
+    char fileType = folder[5];
     strcat(filePath,folder);
     strcat(filePath,fileName);
 
-    Graph* g = new Graph(filePath);
-
+    Graph* g = new Graph(filePath,fileType);
+    int test;
     g->printVertexWeight();
     cout << endl;
     g->printGroupsBounds();
     cout << endl;
+    cin >> test;
     g->printGraph();
     cout << endl;
     g->printGraphList();
