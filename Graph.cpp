@@ -13,6 +13,10 @@ Graph::~Graph(){
     }
     delete [] edges;
     delete [] vertices;
+    for(int i = 0; i < groupsNumber; i++){
+        delete [] groupsBounds[i];
+    }
+    delete [] groupsBounds;
 }
 
 void Graph::printGraph(){
@@ -28,7 +32,7 @@ void Graph::printGraph(){
 void Graph::printGraphList(){
 
     for(int i = 0; i < verticesNumber; i++){
-        cout << i << " -> ";
+        cout << i << "(" << vertices[i] << ")" <<" -> ";
         for(int j = 0; j < verticesNumber; j++){
             if(edges[i][j] != -1)
                 cout << j << "("<< edges[i][j] << ")  ";
@@ -40,8 +44,9 @@ void Graph::printGraphList(){
 void Graph::printVertexWeight(){
 
     for(int i = 0; i < verticesNumber; i++){
-        cout << vertices[i] << endl;
+        cout << vertices[i] << " ";
     }
+    cout << endl;
 }
 
 void Graph::printGroupsBounds(){
