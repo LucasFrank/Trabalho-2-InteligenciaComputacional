@@ -1,0 +1,39 @@
+Formato das instâncias
+-------------------
+
+Temos 4 diferentes tipos de instâncias
+* Tipo A - com 82 vértices
+* Tipo B - com n = 240
+* Tipo C - com n = 480
+* Tipo D - instâncias sintéticas
+
+** A instância exemplo foi construída seguindo a descrição do Tipo A.
+
+
+>>> Para as instâncias dos 3 primeiros tipos, temos:
+
+A primeira linha tem os seguintes campos separados por espaços:
+* M: Inteiro indicando o número de elementos
+* C: Inteiro indicando o número de grupos
+* Tipo de grupo: O valor pode ser "ss" ou "ds" e representa "grupos de mesmo tamanho" ou "grupos de tamanho diferente"
+* Limites para os grupos: limites inferior e superior de cada grupo
+* Separados: Letra "W", não tem sentido, é usado apenas como separador
+* Pesos dos nós: o peso de cada nó
+
+As linhas a seguir contêm o grau de interesse em comum entre as pessoas com
+o formato: elementA elementB grauInteresse
+
+>>> No caso dos arquivos do Tipo D:
+
+* O nome de cada instância tem o seguinte formato "N_C_S", em que:
+    * N - é o número de nós.
+    * C - é o número de grupos.
+    * S - identificador da semente usada para gerar essa instância.
+
+* Cada instância inclui os seguintes dados:
+    * N: Inteiro indicando o número de nós
+    * C: inteiro indicando o número de grupos
+    * CC: Double indicando a capacidade dos grupos (todos os grupos têm a mesma capacidade)
+    * Pesos dos nós: o peso de cada nó
+    * Matriz: Matriz de inteiros indicando os pesos das arestas entre nós
+
