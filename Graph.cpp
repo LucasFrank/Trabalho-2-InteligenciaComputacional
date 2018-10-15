@@ -209,8 +209,242 @@ void Graph::readFile(char fileName [], char readType){
 
     }
 
-
     txtFile.close();
 
 }
 
+bool Graph::isCover(int* verticesAux){
+
+    for(int i = 0; i < verticesNumber; i++){
+        if(verticesAux[i] == 0)
+            return false;
+    }
+    return true;
+}
+
+bool Graph::forcedStopCondition(int* groupsAux){
+    for(int i = 0; i < groupsNumber; i++){
+        if(groupsAux[i] != -1)
+            return false;
+    }
+    return true;
+}
+
+bool Graph::verifyBounds(vector< vector<int> > sol){
+
+    for(unsigned int i = 0; i < sol.size(); i++){
+        vector<int> currentGroup = sol.at(i);
+        int weight = 0;
+        for(unsigned int j = 0; j < currentGroup.size(); j++){
+            weight += vertices[currentGroup.at(j)];
+        }
+        if(weight < groupsBounds[i][0] || weight > groupsBounds[i][1]){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Graph::verifyEdges(int vertex){
+    for(int i = 0; i < verticesNumber; i++){
+        if(edges[vertex][i] != 0)
+            return true;
+    }
+    return false;
+}
+
+int Graph::getVertexEdgeWeight(int vertex){
+
+    float weight = 0;
+    for(int i = 0; i < verticesNumber; i++){
+        weight += edges[vertex][i];
+    }
+    return weight;
+}
+
+int Graph::getVertex(int* vert){
+
+    for(int i = 0; i < verticesNumber; i++){
+        if(vert[i] == 0)
+            return i;
+    }
+    return -1;
+}
+
+int Graph::getVertexByWeight(int* vert){
+
+    float weight = 0;
+    int vertexIndex = -1;
+    for(int i = 0; i < verticesNumber; i++){
+        if(vert[i] == 0)
+            if(vertices[i] > weight && verifyEdges(i)){
+                weight = vertices[i];
+                vertexIndex = i;
+            }
+    }
+    return vertexIndex;
+}
+
+int Graph::getVertexNeighbor(int* vert, int vertexValue){
+
+    if(vertexValue == -1)
+        return -1;
+
+    for(int i = 0; i < verticesNumber; i++){
+        if(edges[vertexValue][i] != 0){
+            if(vert[i] != 1){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+vector<int> Graph::getNeighborhood(vector<int> group){
+
+    vector<int> neighborhood;
+    for(unsigned int i = 0; i < group.size(); i++){
+        int vertexAux = group.at(i);
+        for(int j = 0; j < verticesNumber; j++){
+            if(edges[vertexAux][j] != 0 && !(find(group.begin(),group.end(),j) != group.end()) && !(find(neighborhood.begin(),neighborhood.end(),j) != neighborhood.end()))
+                neighborhood.push_back(j);
+        }
+    }
+
+    return neighborhood;
+}
+
+int Graph::getVertexByWeightNeighbor(int* vert,vector<int> group){
+
+    int vertexIndex = -1;
+    float weight = 0;
+
+    for(unsigned int i = 0; i < group.size(); i++){
+        int vertexAux = group.at(i);
+        for(int j = 0; j < verticesNumber; j++){
+            if(edges[vertexAux][j] != 0){
+                if(vert[j] == 0 && vertices[j] > weight){
+                    weight = vertices[j];
+                    vertexIndex = j;
+                }
+            }
+        }
+    }
+
+    return vertexIndex;
+}
+
+int Graph::getVertexByWeightNeighbor(int* vert,vector<int> group,vector<int> fail){
+
+    int vertexIndex = -1;
+    float weight = 0;
+
+    for(unsigned int i = 0; i < group.size(); i++){
+        int vertexAux = group.at(i);
+        for(int j = 0; j < verticesNumber; j++){
+            if(edges[vertexAux][j] != 0){
+                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && vertices[j] > weight){
+                    weight = vertices[j];
+                    vertexIndex = j;
+                }
+            }
+        }
+    }
+
+    return vertexIndex;
+}
+
+void Graph::setVertexCoverWithNoEdges(int* verticesCover){
+
+    for(int i = 0; i < verticesNumber; i++){
+        if(!verifyEdges(i)){
+            verticesCover[i] = 1;
+        }
+    }
+}
+
+vector< vector<int> > Graph::greedyHeuristic(){
+
+    vector< vector<int> > solution(groupsNumber); /// to store the solution
+    int* verticesCover = new int[verticesNumber]; /// to keep track of which vertex that was checked
+    for(int i = 0; i < verticesNumber; i++)
+        verticesCover[i] = 0;
+
+    int* currentWeightGroup = new int[groupsNumber]; /// to store each weight of each group
+    int* currentVertex = new int[groupsNumber];
+    for(int i = 0; i < groupsNumber; i++){
+        currentWeightGroup[i] = 0;
+        currentVertex[i] = -1;
+    }
+
+    vector< vector<int> > failed(groupsNumber); /// to store the vertices that failed to insert into a group
+
+    setVertexCoverWithNoEdges(verticesCover);
+    while(!isCover(verticesCover)){
+        for(unsigned int i = 0; i < solution.size(); i++){
+            if(solution[i].size() == 0){
+                currentVertex[i] = getVertexByWeight(verticesCover);
+                solution[i].push_back(currentVertex[i]);
+                verticesCover[currentVertex[i]] = 1;
+                currentWeightGroup[i] += vertices[currentVertex[i]];
+            }else{
+                currentVertex[i] = getVertexByWeightNeighbor(verticesCover,solution[i],failed[i]);
+                if(currentVertex[i] != -1 && currentWeightGroup[i] + vertices[currentVertex[i]] <= groupsBounds[i][1]){
+                    solution[i].push_back(currentVertex[i]);
+                    verticesCover[currentVertex[i]] = 1;
+                    currentWeightGroup[i] += vertices[currentVertex[i]];
+                }else if(currentVertex[i] != -1 && currentWeightGroup[i] + vertices[currentVertex[i]] > groupsBounds[i][1]){
+                    failed[i].push_back(currentVertex[i]);
+                }
+            }
+        }
+        if(forcedStopCondition(currentVertex))
+            break;
+    }
+
+    delete currentVertex;
+    delete currentWeightGroup;
+    delete verticesCover;
+    return solution;
+}
+
+void Graph::runGreedyAlgorithm(){
+
+    vector< vector<int> > solution = greedyHeuristic();
+
+    ///Printing
+    cout << endl << "Greedy Solution: " << endl;
+    for(unsigned int i = 0; i < solution.size(); i++){
+        vector<int> currentGroup = solution.at(i);
+        cout << i << ": ";
+        for(unsigned int j = 0; j < currentGroup.size(); j++){
+            cout << currentGroup.at(j) << " ";
+        }
+        cout << endl;
+    }
+
+    if(!verifyBounds(solution))
+        cout << endl << "Solution is not within bounds." << endl;
+    else
+        cout << endl << "Bounds working." << endl;
+
+    calculateTotalEdgeWeight(solution);
+}
+
+void Graph::calculateTotalEdgeWeight(vector< vector<int> > sol){
+    float totalWeight = 0;
+    for(unsigned int i = 0; i < sol.size(); i++){
+        vector<int> alreadyUsed;
+        vector<int> currentGroup = sol.at(i);
+        for(unsigned int j = 0; j < currentGroup.size(); j++){
+            for(unsigned int k = 0; k < currentGroup.size(); k++){
+                if(!(find(alreadyUsed.begin(),alreadyUsed.end(),currentGroup.at(k)) != alreadyUsed.end())){
+                    alreadyUsed.push_back(currentGroup.at(j));
+                    totalWeight += edges[currentGroup.at(j)][currentGroup.at(k)];
+                }
+            }
+        }
+    }
+
+    cout << endl << "Total Weight: " << totalWeight << endl;
+}
