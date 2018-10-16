@@ -277,7 +277,7 @@ int Graph::getVertexByWeight(int* vert){
     int vertexIndex = -1;
     for(int i = 0; i < verticesNumber; i++){
         if(vert[i] == 0)
-            if(vertices[i] > weight && verifyEdges(i)){
+            if(vertices[i] > weight){
                 weight = vertices[i];
                 vertexIndex = i;
             }
@@ -343,8 +343,9 @@ int Graph::getVertexByWeightNeighbor(int* vert,vector<int> group,vector<int> fai
         int vertexAux = group.at(i);
         for(int j = 0; j < verticesNumber; j++){
             if(edges[vertexAux][j] != 0){
-                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && vertices[j] > weight){
-                    weight = vertices[j];
+                float weightAux = vertices[j] + getVertexEdgeWeight(j); /// Testing sum vertex weight with edge weight
+                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && weightAux > weight){
+                    weight = weightAux;
                     vertexIndex = j;
                 }
             }
@@ -379,7 +380,7 @@ vector< vector<int> > Graph::greedyHeuristic(){
 
     vector< vector<int> > failed(groupsNumber); /// to store the vertices that failed to insert into a group
 
-    setVertexCoverWithNoEdges(verticesCover);
+
     while(!isCover(verticesCover)){
         for(unsigned int i = 0; i < solution.size(); i++){
             if(solution[i].size() == 0){
@@ -389,6 +390,9 @@ vector< vector<int> > Graph::greedyHeuristic(){
                 currentWeightGroup[i] += vertices[currentVertex[i]];
             }else{
                 currentVertex[i] = getVertexByWeightNeighbor(verticesCover,solution[i],failed[i]);
+                if(currentVertex[i] == -1)
+                    currentVertex[i] = getVertexByWeight(verticesCover);
+
                 if(currentVertex[i] != -1 && currentWeightGroup[i] + vertices[currentVertex[i]] <= groupsBounds[i][1]){
                     solution[i].push_back(currentVertex[i]);
                     verticesCover[currentVertex[i]] = 1;
@@ -398,8 +402,6 @@ vector< vector<int> > Graph::greedyHeuristic(){
                 }
             }
         }
-        if(forcedStopCondition(currentVertex))
-            break;
     }
 
     delete currentVertex;

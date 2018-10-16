@@ -48,7 +48,6 @@ class Graph{
         void printGroupsBounds();
         void runGreedyAlgorithm();
 
-
 };
 
 
