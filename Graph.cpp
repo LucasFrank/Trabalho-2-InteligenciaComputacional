@@ -21,6 +21,7 @@ Graph::~Graph(){
 
 void Graph::printGraph(){
 
+    cout << endl << "Graph 2D-Array: " << endl;
     for(int i = 0; i < verticesNumber; i++){
         for(int j = 0; j < verticesNumber; j++){
             cout << edges[i][j] << " ";
@@ -31,6 +32,7 @@ void Graph::printGraph(){
 
 void Graph::printGraphList(){
 
+    cout << endl << "Graph List: " << endl;
     for(int i = 0; i < verticesNumber; i++){
         cout << i << "(" << vertices[i] << ")" <<" -> ";
         for(int j = 0; j < verticesNumber; j++){
@@ -43,6 +45,7 @@ void Graph::printGraphList(){
 
 void Graph::printVertexWeight(){
 
+    cout << endl << "Vertex Weight: " << endl;
     for(int i = 0; i < verticesNumber; i++){
         cout << vertices[i] << " ";
     }
@@ -51,6 +54,7 @@ void Graph::printVertexWeight(){
 
 void Graph::printGroupsBounds(){
 
+    cout << endl << "Groups Bounds: " << endl;
     for(int i = 0; i < groupsNumber; i++){
         for(int j = 0; j < 2; j++){
             cout << groupsBounds[i][j] << " ";
@@ -343,9 +347,8 @@ int Graph::getVertexByWeightNeighbor(int* vert,vector<int> group,vector<int> fai
         int vertexAux = group.at(i);
         for(int j = 0; j < verticesNumber; j++){
             if(edges[vertexAux][j] != 0){
-                float weightAux = vertices[j] + getVertexEdgeWeight(j); /// Testing sum vertex weight with edge weight
-                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && weightAux > weight){
-                    weight = weightAux;
+                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && vertices[j] > weight){
+                    weight = vertices[j];
                     vertexIndex = j;
                 }
             }
