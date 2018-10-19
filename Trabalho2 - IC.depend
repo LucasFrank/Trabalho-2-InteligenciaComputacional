@@ -1,19 +1,29 @@
 # depslib dependency file v1.0
-1539050326 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/Graph.cpp
+1539058005 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/Graph.cpp
+	"Graph.h"
 	"Graph.h"
 
 1539048634 
 
-1539049610 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/main.cpp
+1539059996 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/main.cpp
+	<iostream>
+	"Graph.h"
 	<iostream>
 	"Graph.h"
 
-1539048634 /home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/Graph.h
+1539056350 /home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/Graph.h
 	<stdio.h>
 	<iostream>
 	<string.h>
 	<fstream>
 	<stdlib.h>
+	<stdio.h>
+	<iostream>
+	<string.h>
+	<fstream>
+	<stdlib.h>
+	<vector>
+	<sstream>
 
 1539054909 source:e:\users\lucas\downloads\ufjf\2018 - 3\ic\trabalho2 - ic\graph.cpp
 	"Graph.h"
@@ -31,22 +41,6 @@
 	<iostream>
 	"Graph.h"
 
-1539058005 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/Graph.cpp
-	"Graph.h"
-
-1539056350 /home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/Graph.h
-	<stdio.h>
-	<iostream>
-	<string.h>
-	<fstream>
-	<stdlib.h>
-	<vector>
-	<sstream>
-
-1539059996 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/main.cpp
-	<iostream>
-	"Graph.h"
-
 1539099887 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2---IC/Graph.cpp
 	"Graph.h"
 
@@ -61,5 +55,23 @@
 
 1539099723 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2---IC/main.cpp
 	<iostream>
+	"Graph.h"
+
+1539909889 source:c:\users\emanu\documents\github\trabalho2---ic\main.cpp
+	<iostream>
+	"Graph.h"
+
+1539907704 c:\users\emanu\documents\github\trabalho2---ic\graph.h
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string.h>
+	<fstream>
+	<sstream>
+	<vector>
+	<algorithm>
+	<time.h>
+
+1539909909 source:c:\users\emanu\documents\github\trabalho2---ic\graph.cpp
 	"Graph.h"
 
