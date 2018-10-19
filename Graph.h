@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <time.h>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class Graph{
         void readFile(char fileName [], char readType);
         void insertEdge(int vertexOne, int vertexTwo, float edgeWeight);
 
-        void calculateTotalEdgeWeight(vector< vector<int> > sol);
+        float calculateTotalEdgeWeight(vector< vector<int> > sol);
         void setVertexCoverWithNoEdges(int* verticesCover);
         bool forcedStopCondition(int* groupsAux);
         bool isCover(int* verticesAux);
@@ -38,6 +39,8 @@ class Graph{
         vector<int> getNeighborhood(vector<int> group);
         vector< vector<int> > greedyHeuristic();
 
+        vector< vector<int> > localSearch(bool firstBest, int timeLimit);
+        float calculateVertexGroupWeight(vector<int> group);
 
     public:
         Graph(char fileName [], char readType);
@@ -47,6 +50,7 @@ class Graph{
         void printVertexWeight();
         void printGroupsBounds();
         void runGreedyAlgorithm();
+        void runLocalSearchAlgorithm(bool firstBest, int timeLimit);
 
 };
 

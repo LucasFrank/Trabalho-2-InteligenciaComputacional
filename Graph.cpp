@@ -1,6 +1,15 @@
 #include "Graph.h"
 
-
+#define SWAP(sol, group1, element1, group2, element2){\
+            int temp = sol[group1][element1];\
+            sol[group1][element1] = sol[group2][element2];\
+            sol[group2][element2] = temp;}
+#define VERIFY_VIABILITY(sol, group)({\
+            float weight = calculateVertexGroupWeight(sol[group]);\
+            weight <= groupsBounds[group][1] && weight >= groupsBounds[group][0];})
+#define VERIFY_TIME(clockIni, time)({\
+            time == 0 ? \
+            1 : (clock()-clockIni)/(float)CLOCKS_PER_SEC < time;})
 Graph::Graph(char fileName [], char readType){
 
     readFile(fileName,readType);
@@ -347,10 +356,14 @@ int Graph::getVertexByWeightNeighbor(int* vert,vector<int> group,vector<int> fai
         int vertexAux = group.at(i);
         for(int j = 0; j < verticesNumber; j++){
             if(edges[vertexAux][j] != 0){
-                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && vertices[j] > weight){
-                    weight = vertices[j];
+                if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && edges[vertexAux][j] > weight){
+                    weight = edges[vertexAux][j];
                     vertexIndex = j;
                 }
+                /*if(!(find(fail.begin(),fail.end(),j) != fail.end()) && vert[j] == 0 && vertices[j] > weight){
+                    weight = vertices[j];
+                    vertexIndex = j;
+                }*/
             }
         }
     }
@@ -433,10 +446,10 @@ void Graph::runGreedyAlgorithm(){
     else
         cout << endl << "Bounds working." << endl;
 
-    calculateTotalEdgeWeight(solution);
+    cout << "TotalWeight " << calculateTotalEdgeWeight(solution) << endl;
 }
 
-void Graph::calculateTotalEdgeWeight(vector< vector<int> > sol){
+float Graph::calculateTotalEdgeWeight(vector< vector<int> > sol){
     float totalWeight = 0;
     for(unsigned int i = 0; i < sol.size(); i++){
         vector<int> alreadyUsed;
@@ -450,6 +463,79 @@ void Graph::calculateTotalEdgeWeight(vector< vector<int> > sol){
             }
         }
     }
-
-    cout << endl << "Total Weight: " << totalWeight << endl;
+    return totalWeight;
+}
+vector< vector<int> > Graph::localSearch(bool firstBest, int timeLimit){
+    vector<vector<int>> solution = greedyHeuristic();
+    vector<vector<int>> partialSolution;
+    vector<vector<int>> auxSolution;
+    vector<vector<int>> groupAux;
+    float bestSolutionWeight, initialWeight1 = 0, initialWeight2 = 0, partialSolutionWeight = 0, auxSolutionWeight = 0;
+    bestSolutionWeight = calculateTotalEdgeWeight(solution);
+    unsigned groupNum = solution.size() - 1;
+    unsigned groupSize = 0;
+    unsigned localGroupSize = 0;
+    bool breakAll = false;
+    clock_t clockIni = clock();
+    while(VERIFY_TIME(clockIni, timeLimit)){
+        for(unsigned i = 0; i < groupNum && !breakAll; i++){
+            groupSize = solution[i].size();
+            for(unsigned j = 0; j < groupSize && !breakAll; j++){
+                auxSolution = solution;
+                for(unsigned l = i + 1; l < groupNum && !breakAll; l++){
+                    localGroupSize = solution[l].size();
+                    for(unsigned k = 0; k < localGroupSize && !breakAll; k++){
+                        groupAux.clear();
+                        groupAux.push_back(auxSolution[i]);
+                        initialWeight1 = calculateTotalEdgeWeight(groupAux);
+                        groupAux.clear();
+                        groupAux.push_back(auxSolution[l]);
+                        initialWeight2 = calculateTotalEdgeWeight(groupAux);
+                        auxSolutionWeight = bestSolutionWeight;
+                        SWAP(auxSolution,i,j,l,k)
+                        if(VERIFY_VIABILITY(auxSolution, l) && VERIFY_VIABILITY(auxSolution, i)){
+                            auxSolutionWeight -= (initialWeight1 + initialWeight2);
+                            groupAux.clear();
+                            groupAux.push_back(auxSolution[i]);
+                            initialWeight1 = calculateTotalEdgeWeight(groupAux);
+                            groupAux.clear();
+                            groupAux.push_back(auxSolution[l]);
+                            initialWeight2 = calculateTotalEdgeWeight(groupAux);
+                            auxSolutionWeight += (initialWeight1 + initialWeight2);
+                            if(auxSolutionWeight > bestSolutionWeight){
+                                partialSolutionWeight = auxSolutionWeight;
+                                partialSolution = auxSolution;
+                                if(firstBest) breakAll = true;
+                            }
+                        }
+                        SWAP(auxSolution,i,j,l,k)
+                    }
+                }
+            }
+        }
+        if(partialSolutionWeight > bestSolutionWeight){
+            bestSolutionWeight = partialSolutionWeight;
+            solution = partialSolution;
+        }else{
+            break;
+        }
+        breakAll = false;
+    }
+    return solution;
+}
+void Graph::runLocalSearchAlgorithm(bool firstBest, int timeLimit){
+    vector<vector<int>> l = localSearch(firstBest, timeLimit);
+    cout << "LocalSearch Best Weight " << calculateTotalEdgeWeight(l) << endl;
+    if(verifyBounds(l)){
+        cout << "Bounds Ok" << endl;
+    }else{
+        cout << "Bounds not Ok" << endl;
+    }
+}
+float Graph::calculateVertexGroupWeight(vector<int>group){
+    float weight = 0;
+    for(unsigned i = 0; i < group.size(); i++){
+        weight += vertices[group[i]];
+    }
+    return weight;
 }
