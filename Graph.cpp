@@ -502,7 +502,7 @@ vector< vector<int> > Graph::localSearch(bool firstBest, int timeLimit){
                             groupAux.push_back(auxSolution[l]);
                             initialWeight2 = calculateTotalEdgeWeight(groupAux);
                             auxSolutionWeight += (initialWeight1 + initialWeight2);
-                            if(auxSolutionWeight > bestSolutionWeight){
+                            if(auxSolutionWeight > partialSolutionWeight){
                                 partialSolutionWeight = auxSolutionWeight;
                                 partialSolution = auxSolution;
                                 if(firstBest) breakAll = true;
@@ -516,6 +516,7 @@ vector< vector<int> > Graph::localSearch(bool firstBest, int timeLimit){
         if(partialSolutionWeight > bestSolutionWeight){
             bestSolutionWeight = partialSolutionWeight;
             solution = partialSolution;
+            partialSolutionWeight = 0;
         }else{
             break;
         }
@@ -523,8 +524,13 @@ vector< vector<int> > Graph::localSearch(bool firstBest, int timeLimit){
     }
     return solution;
 }
-void Graph::runLocalSearchAlgorithm(bool firstBest, int timeLimit){
-    vector<vector<int>> l = localSearch(firstBest, timeLimit);
+void Graph::runLocalSearchAlgorithm(bool firstBest, bool random, int timeLimit){
+    vector<vector<int>> l;
+    if(random){
+        l = localSearchRandom(timeLimit);
+    }else{
+        l = localSearch(firstBest, timeLimit);
+    }
     cout << "LocalSearch Best Weight " << calculateTotalEdgeWeight(l) << endl;
     if(verifyBounds(l)){
         cout << "Bounds Ok" << endl;
@@ -538,4 +544,47 @@ float Graph::calculateVertexGroupWeight(vector<int>group){
         weight += vertices[group[i]];
     }
     return weight;
+}
+vector<vector<int>> Graph::localSearchRandom(int timeLimit){
+    vector<vector<int>> solution = greedyHeuristic();
+    vector<vector<int>> groupAux;
+    float bestSolutionWeight, initialWeight1 = 0, initialWeight2 = 0, partialSolutionWeight = 0;
+    bestSolutionWeight = calculateTotalEdgeWeight(solution);
+    clock_t clockIni = clock();
+    unsigned i = 0, j = 0, k = 0, l = 0;
+    unsigned groupNum = solution.size();
+    while(VERIFY_TIME(clockIni, timeLimit)){
+        i = rand() % groupNum;
+        j = rand() % solution[i].size();
+        k = rand() % groupNum;
+        while(k == i) k = rand() % groupNum;
+        l = rand() % solution[k].size();
+
+        groupAux.clear();
+        groupAux.push_back(solution[i]);
+        initialWeight1 = calculateTotalEdgeWeight(groupAux);
+        groupAux.clear();
+        groupAux.push_back(solution[k]);
+        initialWeight2 = calculateTotalEdgeWeight(groupAux);
+        partialSolutionWeight = bestSolutionWeight;
+        SWAP(solution,i,j,k,l)
+        if(VERIFY_VIABILITY(solution, k) && VERIFY_VIABILITY(solution, i)){
+            partialSolutionWeight -= (initialWeight1 + initialWeight2);
+            groupAux.clear();
+            groupAux.push_back(solution[i]);
+            initialWeight1 = calculateTotalEdgeWeight(groupAux);
+            groupAux.clear();
+            groupAux.push_back(solution[k]);
+            initialWeight2 = calculateTotalEdgeWeight(groupAux);
+            partialSolutionWeight += (initialWeight1 + initialWeight2);
+            if(partialSolutionWeight > bestSolutionWeight){
+                bestSolutionWeight = partialSolutionWeight;
+            }else{
+                SWAP(solution,i,j,k,l)
+            }
+        }else{
+            SWAP(solution,i,j,k,l)
+        }
+    }
+    return solution;
 }
