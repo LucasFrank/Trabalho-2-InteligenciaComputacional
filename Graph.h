@@ -40,6 +40,7 @@ class Graph{
         vector< vector<int> > greedyHeuristic();
 
         vector< vector<int> > localSearch(bool firstBest, int timeLimit);
+        vector< vector<int> > localSearchRandom(int timeLimit);
         float calculateVertexGroupWeight(vector<int> group);
 
     public:
@@ -50,7 +51,7 @@ class Graph{
         void printVertexWeight();
         void printGroupsBounds();
         void runGreedyAlgorithm();
-        void runLocalSearchAlgorithm(bool firstBest, int timeLimit);
+        void runLocalSearchAlgorithm(bool firstBest, bool random, int timeLimit);
 
 };
 
