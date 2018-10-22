@@ -43,8 +43,12 @@ class Graph{
 
         vector< vector<int> > localSearch(bool firstBest, bool randomGreedy, int timeLimit);
         vector< vector<int> > localSearchRandom(bool randomGreedy, int timeLimit);
+        vector< vector<int> > localSearchRandom2(bool randomGreedy, int timeLimit);
         float calculateVertexGroupWeight(vector<int> group);
 
+        float* getSolutionGroupWeight(vector< vector<int> > sol);
+        float getEdgeWeightByVertex(int v, vector<int> sol);
+        bool verifyViabilityVertex(float* weight, float vertexWeight, unsigned group );
 
         void writeFile(ofstream *out, bool firstBest, bool random, bool randomGreedy, float bestWeight, float mean, vector< vector<int> > sol);
 

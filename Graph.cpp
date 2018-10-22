@@ -7,6 +7,9 @@
 #define VERIFY_VIABILITY(sol, group)({\
             float weight = calculateVertexGroupWeight(sol[group]);\
             weight <= groupsBounds[group][1] && weight >= groupsBounds[group][0];})
+#define VERIFY_VIABILITY_ALONE(sol, group)({\
+            float weight = calculateVertexGroupWeight(sol);\
+            weight <= groupsBounds[group][1] && weight >= groupsBounds[group][0];})
 #define VERIFY_TIME(clockIni, time)({\
             time == 0 ? \
             1 : (clock()-clockIni)/(float)CLOCKS_PER_SEC < time;})
@@ -580,7 +583,7 @@ void Graph::runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGree
     int i = 0;
     while(i < numberOfIteration){
         if(random){
-            l = localSearchRandom(randomGreedy,timeLimit);
+            l = localSearchRandom2(randomGreedy,timeLimit);
         }else{
             l = localSearch(firstBest,randomGreedy, timeLimit);
         }
@@ -697,4 +700,159 @@ void Graph::calculateTotalEdgeWeightVerification(){
     }
     cout << fixed;
     cout << "Total weight in edges: " << weight << endl;
+}
+
+vector<vector<int> > Graph::localSearchRandom2(bool randomGreedy, int timeLimit){
+    vector<vector<int> > solution = greedyHeuristic();
+    if(randomGreedy)
+        solution = randomizeSolution(solution);
+
+    vector<vector<int> > groupAux;
+    vector<int> partialGroup;
+    float* groupWeight = getSolutionGroupWeight(solution);
+    float bestSolutionWeight, initialWeight1 = 0, initialWeight2 = 0, afterWeight1 = 0, afterWeight2 = 0;
+    float weight[3];
+    int best = 0;
+    float bestWeight = 0;
+    bestSolutionWeight = calculateTotalEdgeWeight(solution);
+    clock_t clockIni = clock();
+    unsigned i = 0, j = 0, k = 0, l = 0;
+    unsigned groupNum = solution.size();
+    while(VERIFY_TIME(clockIni, timeLimit)){
+        best = 0;
+        bestWeight = 0;
+        i = rand() % groupNum;
+        j = rand() % solution[i].size();
+        k = rand() % groupNum;
+        while(k == i) k = rand() % groupNum;
+        l = rand() % solution[k].size();
+
+        ///Verificando troca do vértice j pelo l
+        groupAux.clear();
+        groupAux.push_back(solution[i]);
+        initialWeight1 = calculateTotalEdgeWeight(groupAux);
+        groupAux.clear();
+        groupAux.push_back(solution[k]);
+        initialWeight2 = calculateTotalEdgeWeight(groupAux);
+
+        SWAP(solution,i,j,k,l)
+        groupAux.clear();
+        groupAux.push_back(solution[i]);
+        afterWeight1 = calculateTotalEdgeWeight(groupAux);
+        groupAux.clear();
+        groupAux.push_back(solution[k]);
+        afterWeight2 = calculateTotalEdgeWeight(groupAux);
+        weight[0] = (afterWeight1 + afterWeight2) - (initialWeight1 + initialWeight2);
+
+        if(!VERIFY_VIABILITY(solution, k) && !VERIFY_VIABILITY(solution, i)){
+            weight[0] = -1;
+        }
+        SWAP(solution,i,j,k,l)
+
+        ///Verificando vértice j
+        weight[1] = bestSolutionWeight;
+        initialWeight1 = getEdgeWeightByVertex(solution[k][l],solution[k]); /// calcula o valor peso que solution[k][l] tem em solution[k]
+        weight[1] = initialWeight1;
+        partialGroup = solution[i];
+        partialGroup.push_back(solution[k][l]);
+        afterWeight1 = getEdgeWeightByVertex(solution[k][l],partialGroup);
+        weight[1] = afterWeight1 - initialWeight1;
+        if(verifyViabilityVertex(groupWeight,vertices[solution[k][l]],k)){
+            if(!VERIFY_VIABILITY_ALONE(partialGroup, i)){
+                if(weight[1] <= 0)
+                    weight[1] = -1;
+            }
+        }else{
+            weight[1] = -1;
+        }
+
+        ///Verificando vértice l
+        weight[2] = bestSolutionWeight;
+        initialWeight2 = getEdgeWeightByVertex(solution[i][j],solution[i]); /// calcula o valor peso que solution[k][l] tem em solution[k]
+        weight[2] = initialWeight2;
+        partialGroup = solution[k];
+        partialGroup.push_back(solution[i][j]);
+        afterWeight2 = getEdgeWeightByVertex(solution[i][j],partialGroup);
+        weight[2] = afterWeight2 - initialWeight2;
+        if(verifyViabilityVertex(groupWeight,vertices[solution[i][j]],i)){
+            if(!VERIFY_VIABILITY_ALONE(partialGroup, k)){
+                if(weight[2] <= 0)
+                    weight[2] = -1;
+            }
+        }else{
+            weight[2] = -1;
+        }
+
+        if(weight[0] > -1 || weight[1] > -1 || weight[2] > -1){
+            best = 0;
+            bestWeight = weight[0];
+            if(weight[1] > bestWeight){
+                best = 1;
+                bestWeight = weight[1];
+            }
+            if(weight[2] > bestWeight){
+                best = 2;
+                bestWeight = weight[2];
+            }
+
+        }else{
+            best = -1;
+        }
+
+        if(best > -1){
+            switch(best){
+                case 0:
+                    bestSolutionWeight += bestWeight;
+                    SWAP(solution,i,j,k,l)
+                    break;
+                case 1:
+                    solution[i].push_back(solution[k][l]);
+                    solution[k].erase(solution[k].begin() + l);
+                    groupWeight[i] += vertices[solution[k][l]];
+                    groupWeight[k] -= vertices[solution[k][l]];
+                    bestSolutionWeight += bestWeight;
+                    break;
+                case 2:
+                    solution[k].push_back(solution[i][j]);
+                    solution[i].erase(solution[i].begin() + j);
+                    groupWeight[i] -= vertices[solution[i][j]];
+                    groupWeight[k] += vertices[solution[i][j]];
+                    bestSolutionWeight += bestWeight;
+            }
+        }
+    }
+    return solution;
+}
+
+float* Graph::getSolutionGroupWeight(vector< vector<int> > sol){
+    float* groupWeight = new float[groupsNumber];
+
+    for(int i = 0; i < groupsNumber; i++){
+        groupWeight[i] = 0;
+        for(unsigned int j = 0; j < sol.size(); j++){
+            vector<int> currentGroup = sol.at(j);
+            for(unsigned int k = 0; k < currentGroup.size(); k++){
+                groupWeight[i] += vertices[currentGroup.at(k)];
+            }
+        }
+    }
+
+    return groupWeight;
+}
+
+float Graph::getEdgeWeightByVertex(int v, vector<int> group){
+    float weight = 0;
+
+    for(unsigned int i = 0; i < group.size(); i++){
+        weight += edges[v][group.at(i)];
+    }
+
+    return weight;
+}
+
+bool Graph::verifyViabilityVertex(float* weight, float vertexWeight, unsigned group){
+    if(weight[group] - vertexWeight >= groupsBounds[group][0] && weight[group] + vertexWeight <= groupsBounds[group][1]){
+        return true;
+    }
+    return false;
 }

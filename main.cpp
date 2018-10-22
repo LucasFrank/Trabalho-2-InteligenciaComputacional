@@ -43,7 +43,7 @@ vector<string> fileNameFolder(){
     vector<string> fileNames;
 
     fileNames.push_back("DCC136-82_01.txt");
-    fileNames.push_back("DCC136-82_02.txt");
+    /*fileNames.push_back("DCC136-82_02.txt");
     fileNames.push_back("DCC136-82_03.txt");
     fileNames.push_back("DCC136-82_04.txt");
     fileNames.push_back("DCC136-82_05.txt");
@@ -75,7 +75,7 @@ vector<string> fileNameFolder(){
     fileNames.push_back("100_25_A.txt");
     fileNames.push_back("100_25_B.txt");
     fileNames.push_back("200_25_A.txt");
-    fileNames.push_back("200_25_B.txt");
+    fileNames.push_back("200_25_B.txt");*/
 
     return fileNames;
 }
@@ -94,7 +94,6 @@ int main(){
         strcat(filePath,folder);
         strcat(filePath,fileName);
         Graph* g = new Graph(filePath,fileType);
-        g->calculateTotalEdgeWeightVerification();
 
         //g->printVertexWeight();
         //g->printGroupsBounds();
@@ -103,7 +102,7 @@ int main(){
 
         bool firstBest = true;
         bool randomLS = true;
-        bool randomInitialSolution = true;
+        bool randomInitialSolution = false;
         int time = 60;
 
         ofstream out;
