@@ -38,10 +38,15 @@ class Graph{
         int getVertexEdgeWeight(int vertex);
         vector<int> getNeighborhood(vector<int> group);
         vector< vector<int> > greedyHeuristic();
+        vector< vector<int> > randomizeSolution(vector< vector<int> > sol);
+        void printSolution(vector< vector<int> > sol);
 
-        vector< vector<int> > localSearch(bool firstBest, int timeLimit);
-        vector< vector<int> > localSearchRandom(int timeLimit);
+        vector< vector<int> > localSearch(bool firstBest, bool randomGreedy, int timeLimit);
+        vector< vector<int> > localSearchRandom(bool randomGreedy, int timeLimit);
         float calculateVertexGroupWeight(vector<int> group);
+
+
+        void writeFile(ofstream *out, bool firstBest, bool random, bool randomGreedy, float bestWeight, float mean, vector< vector<int> > sol);
 
     public:
         Graph(char fileName [], char readType);
@@ -51,7 +56,8 @@ class Graph{
         void printVertexWeight();
         void printGroupsBounds();
         void runGreedyAlgorithm();
-        void runLocalSearchAlgorithm(bool firstBest, bool random, int timeLimit);
+        void runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGreedy, int timeLimit, ofstream *out);
+        void calculateTotalEdgeWeightVerification();
 
 };
 

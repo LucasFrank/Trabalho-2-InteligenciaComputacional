@@ -1,0 +1,4 @@
+Result
+Best Weight: 21
+Mean: 20.9
+Solution: S = {{ 1, 2, 8},{ 6, 0, 7},{ 3, 5, 4}}
