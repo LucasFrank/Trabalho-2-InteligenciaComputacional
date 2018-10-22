@@ -520,6 +520,7 @@ vector< vector<int> > Graph::localSearch(bool firstBest, bool randomGreedy, int 
     vector<vector<int> > groupAux;
     float bestSolutionWeight, initialWeight1 = 0, initialWeight2 = 0, partialSolutionWeight = 0, auxSolutionWeight = 0;
     bestSolutionWeight = calculateTotalEdgeWeight(solution);
+
     unsigned groupNum = solution.size() - 1;
     unsigned groupSize = 0;
     unsigned localGroupSize = 0;
@@ -750,9 +751,7 @@ vector<vector<int> > Graph::localSearchRandom2(bool randomGreedy, int timeLimit)
         SWAP(solution,i,j,k,l)
 
         ///Verificando vértice j
-        weight[1] = bestSolutionWeight;
         initialWeight1 = getEdgeWeightByVertex(solution[k][l],solution[k]); /// calcula o valor peso que solution[k][l] tem em solution[k]
-        weight[1] = initialWeight1;
         partialGroup = solution[i];
         partialGroup.push_back(solution[k][l]);
         afterWeight1 = getEdgeWeightByVertex(solution[k][l],partialGroup);
@@ -767,9 +766,7 @@ vector<vector<int> > Graph::localSearchRandom2(bool randomGreedy, int timeLimit)
         }
 
         ///Verificando vértice l
-        weight[2] = bestSolutionWeight;
         initialWeight2 = getEdgeWeightByVertex(solution[i][j],solution[i]); /// calcula o valor peso que solution[k][l] tem em solution[k]
-        weight[2] = initialWeight2;
         partialGroup = solution[k];
         partialGroup.push_back(solution[i][j]);
         afterWeight2 = getEdgeWeightByVertex(solution[i][j],partialGroup);
@@ -794,7 +791,6 @@ vector<vector<int> > Graph::localSearchRandom2(bool randomGreedy, int timeLimit)
                 best = 2;
                 bestWeight = weight[2];
             }
-
         }else{
             best = -1;
         }

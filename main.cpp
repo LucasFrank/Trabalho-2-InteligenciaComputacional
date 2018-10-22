@@ -42,7 +42,7 @@ char* formatString(char fileName [], bool firstBest, bool randomLS, bool randomI
 vector<string> fileNameFolder(){
     vector<string> fileNames;
 
-    fileNames.push_back("DCC136-82_01.txt");
+    //fileNames.push_back("DCC136-82_01.txt");
     /*fileNames.push_back("DCC136-82_02.txt");
     fileNames.push_back("DCC136-82_03.txt");
     fileNames.push_back("DCC136-82_04.txt");
@@ -57,11 +57,12 @@ vector<string> fileNameFolder(){
     fileNames.push_back("DCC136-480_01.txt");
     fileNames.push_back("DCC136-480_02.txt");
     fileNames.push_back("DCC136-480_03.txt");
-    fileNames.push_back("DCC136-480_04.txt");
-    fileNames.push_back("DCC136-480_05.txt");
+    fileNames.push_back("DCC136-480_04.txt");*/
+    //fileNames.push_back("DCC136-480_05.txt");
+
 
     fileNames.push_back("20_5_A.txt");
-    fileNames.push_back("20_5_B.txt");
+    /*fileNames.push_back("20_5_B.txt");
     fileNames.push_back("30_5_A.txt");
     fileNames.push_back("30_5_B.txt");
     fileNames.push_back("30_10_A.txt");
@@ -102,7 +103,7 @@ int main(){
 
         bool firstBest = true;
         bool randomLS = true;
-        bool randomInitialSolution = false;
+        bool randomInitialSolution = true;
         int time = 60;
 
         ofstream out;
