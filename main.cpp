@@ -5,7 +5,7 @@
 using namespace std;
 
 char* formatString(char fileName [], bool firstBest, bool randomLS, bool randomInitialSolution){
-    char folder [20]  = "output4/";
+    char folder [20]  = "output5/";
 
     char fb [2];
     char rLS [2];
@@ -42,8 +42,8 @@ char* formatString(char fileName [], bool firstBest, bool randomLS, bool randomI
 vector<string> fileNameFolder(){
     vector<string> fileNames;
 
-    //fileNames.push_back("DCC136-82_01.txt");
-    /*fileNames.push_back("DCC136-82_02.txt");
+    fileNames.push_back("DCC136-82_01.txt");
+    fileNames.push_back("DCC136-82_02.txt");
     fileNames.push_back("DCC136-82_03.txt");
     fileNames.push_back("DCC136-82_04.txt");
     fileNames.push_back("DCC136-82_05.txt");
@@ -57,16 +57,17 @@ vector<string> fileNameFolder(){
     fileNames.push_back("DCC136-480_01.txt");
     fileNames.push_back("DCC136-480_02.txt");
     fileNames.push_back("DCC136-480_03.txt");
-    fileNames.push_back("DCC136-480_04.txt");*/
-    //fileNames.push_back("DCC136-480_05.txt");
+    fileNames.push_back("DCC136-480_04.txt");
+    fileNames.push_back("DCC136-480_05.txt");
 
 
     fileNames.push_back("20_5_A.txt");
-    /*fileNames.push_back("20_5_B.txt");
+    fileNames.push_back("20_5_B.txt");
     fileNames.push_back("30_5_A.txt");
     fileNames.push_back("30_5_B.txt");
     fileNames.push_back("30_10_A.txt");
     fileNames.push_back("30_10_B.txt");
+
     fileNames.push_back("40_5_A.txt");
     fileNames.push_back("40_5_B.txt");
     fileNames.push_back("40_10_A.txt");
@@ -76,7 +77,7 @@ vector<string> fileNameFolder(){
     fileNames.push_back("100_25_A.txt");
     fileNames.push_back("100_25_B.txt");
     fileNames.push_back("200_25_A.txt");
-    fileNames.push_back("200_25_B.txt");*/
+    fileNames.push_back("200_25_B.txt");
 
     return fileNames;
 }

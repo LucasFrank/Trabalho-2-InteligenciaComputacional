@@ -20,13 +20,12 @@ class Graph{
         float** groupsBounds; /// 2d-Array groupsNumber x 2 which position 0 is lower Bound and position 1 is upper Bound
         int verticesNumber; /// Total number of vertices
         int groupsNumber; /// Total number of groups
-
+        float greedyHeuristicResult;
+        float localSearchResult;
         void readFile(char fileName [], char readType);
         void insertEdge(int vertexOne, int vertexTwo, float edgeWeight);
 
         float calculateTotalEdgeWeight(vector< vector<int> > sol);
-        void setVertexCoverWithNoEdges(int* verticesCover);
-        bool forcedStopCondition(int* groupsAux);
         bool isCover(int* verticesAux);
         bool verifyBounds(vector< vector<int> > sol);
         bool verifyEdges(int vertex);
@@ -48,9 +47,8 @@ class Graph{
 
         float* getSolutionGroupWeight(vector< vector<int> > sol);
         float getEdgeWeightByVertex(int v, vector<int> sol);
-        bool verifyViabilityVertex(float* weight, float vertexWeight, unsigned group );
 
-        void writeFile(ofstream *out, bool firstBest, bool random, bool randomGreedy, float bestWeight, float mean, vector< vector<int> > sol);
+        void writeFile(ofstream *out, bool firstBest, bool random, bool randomGreedy, float bestWeight, float mean, vector< vector<int> > sol,int viability);
 
     public:
         Graph(char fileName [], char readType);
