@@ -3,7 +3,7 @@
 	"Graph.h"
 	"Graph.h"
 
-1539048634 
+1541082435 
 
 1539059996 source:/home/lucas/Downloads/UFJF/2018 - 3/Computational Intelligence/Trabalho 2 - Greedy and LS/Trabalho2 - IC/main.cpp
 	<iostream>
@@ -75,4 +75,42 @@
 
 1540054184 source:c:\users\emanu\documents\github\trabalho2---ic\graph.cpp
 	"Graph.h"
+
+1541082057 source:e:\users\lucas\downloads\trabalho2---ic-bltest\graph.cpp
+	"Graph.h"
+
+1541082083 e:\users\lucas\downloads\trabalho2---ic-bltest\graph.h
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string.h>
+	<fstream>
+	<sstream>
+	<vector>
+	<algorithm>
+	<time.h>
+
+1541082435 source:e:\users\lucas\downloads\trabalho2---ic-bltest\main.cpp
+	<iostream>
+	"Graph.h"
+	<time.h>
+
+1541071258 source:/home/lucas/Downloads/Trabalho2---IC-bltest/Graph.cpp
+	"Graph.h"
+
+1541071284 /home/lucas/Downloads/Trabalho2---IC-bltest/Graph.h
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string.h>
+	<fstream>
+	<sstream>
+	<vector>
+	<algorithm>
+	<time.h>
+
+1541083316 source:/home/lucas/Downloads/Trabalho2---IC-bltest/main.cpp
+	<iostream>
+	"Graph.h"
+	<time.h>
 

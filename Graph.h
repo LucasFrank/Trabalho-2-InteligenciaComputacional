@@ -58,7 +58,7 @@ class Graph{
         void printVertexWeight();
         void printGroupsBounds();
         void runGreedyAlgorithm();
-        void runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGreedy, int timeLimit, ofstream *out);
+        void runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGreedy, int timeLimit, int numberOfIterations, ofstream *out);
         void calculateTotalEdgeWeightVerification();
 
 };

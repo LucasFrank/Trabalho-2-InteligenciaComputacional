@@ -5,7 +5,7 @@
 using namespace std;
 
 char* formatString(char fileName [], bool firstBest, bool randomLS, bool randomInitialSolution){
-    char folder [20]  = "output5/";
+    char folder [20]  = "output/";
 
     char fb [2];
     char rLS [2];
@@ -82,7 +82,7 @@ vector<string> fileNameFolder(){
     return fileNames;
 }
 
-int main(){
+int main(int argc, char** args){
     srand(time(NULL));
     vector<string> fileNames = fileNameFolder();
     unsigned int i = 0;
@@ -105,14 +105,16 @@ int main(){
         bool firstBest = true;
         bool randomLS = true;
         bool randomInitialSolution = true;
-        int time = 60;
-
+        int time = atoi(args[1]);
+        cout << time << endl;
+        int numberOfIterations = atoi(args[2]);
+        cout << numberOfIterations << endl;
         ofstream out;
         char* results = formatString(fileName,firstBest,randomLS,randomInitialSolution);
         out.open(results,fstream::out);
 
         //g->runGreedyAlgorithm();
-        g->runLocalSearchAlgorithm(firstBest, randomLS, randomInitialSolution, time,&out);
+        g->runLocalSearchAlgorithm(firstBest, randomLS, randomInitialSolution, time, numberOfIterations, &out);
 
         out.close();
         delete g;

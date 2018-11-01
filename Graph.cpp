@@ -556,7 +556,7 @@ vector< vector<int> > Graph::localSearch(bool firstBest, bool randomGreedy, int 
     return solution;
 }
 
-void Graph::runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGreedy, int timeLimit,ofstream *out){
+void Graph::runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGreedy, int timeLimit, int numberOfIteration,ofstream *out){
 
     vector<vector<int> > l;
     vector<vector<int> > bestSolution;
@@ -564,7 +564,6 @@ void Graph::runLocalSearchAlgorithm(bool firstBest, bool random, bool randomGree
     float bestWeight = 0;
     float mean = 0;
 
-    int numberOfIteration = 10; /// Iterations Number
     int i = 0;
     while(i < numberOfIteration){
         if(random){
